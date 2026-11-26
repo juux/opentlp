@@ -29,4 +29,15 @@ describe('YK Astra P1 protocol', () => {
         expect(raster[0]).toBe(0x02);
         expect(raster.slice(1)).toEqual(new Uint8Array(11));
     });
+
+    it('reverses the editor cross-head axis for the physical S001 print direction', () => {
+        const rgba = new Uint8Array(1 * 2 * 4);
+        for (let i = 0; i < rgba.length; i += 4) {
+            rgba[i] = rgba[i + 1] = rgba[i + 2] = 0;
+            rgba[i + 3] = 255;
+        }
+        const raster = encodeRaster({ width: 1, height: 2, data: rgba });
+        expect(raster.slice(0, 11)).toEqual(new Uint8Array(11));
+        expect(raster[11]).toBe(0x03);
+    });
 });
